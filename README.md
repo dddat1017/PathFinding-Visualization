@@ -9,5 +9,5 @@ FIND THE SHORTEST PATH FROM A 'STARTING' CELL TO AN 'EXIT' CELL USING THE BREADT
 If you would like to add this visualization to your own website. Please feel free to do so! No need to give credit, but would be very much appreciated.
 
 ### Check it out
-<a href="doduydat.com/pathfind.php">doduydat.com/pathfind.php</a>
+https://doduydat.com/pathfind.php
 
