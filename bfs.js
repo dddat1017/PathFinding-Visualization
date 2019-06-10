@@ -61,6 +61,7 @@ $(function() {
             startC = rc[1];     // col value of where "S" is in the matrix.
             document.getElementById("instructions").innerHTML = "&#8618; Now choose the <strong>EXIT</strong>! (Click <strong>'Clear'</strong> to reset)";
             $('#okClear').append('<input id="reset" type="button" value="Clear" onClick="document.location.reload(true)">');
+            $('#instructions').css('color', 'blue');
         } else if (counter < 2) {
             eyeD = $(this).attr('id');    // get 'id' of the 'td' clicked.
 
@@ -75,6 +76,7 @@ $(function() {
             endRC.push(rc[1]);
             document.getElementById("instructions").innerHTML = "&#8618; Now create your <strong>BARRIER/OBSTACLE</strong>! (Click <strong>'Okay!'</strong> when you're done or <strong>'Clear'</strong> to reset)";
             $('#okClear').append('<input id="done" type="button" value="Okay!" onclick="run(); this.onclick=null;">');
+            $('#instructions').css('color', 'red');
         } else {
             eyeD = $(this).attr('id');    // get 'id' of the 'td' clicked.
 
@@ -226,6 +228,7 @@ function run() {
     var finish =  solve();
     final_path = retrace(finish);
     document.getElementById("instructions").innerHTML = "&#8618; Please Wait until path is found!";
+    $('#instructions').css('color', 'darkcyan');
 
     var i = 1;
     // call setInterval once. It will run itself repeatedly until the "E" is reached.
@@ -234,9 +237,10 @@ function run() {
     function doSequence() {
         if ( i >= (final_path.length - 2)) {
             document.getElementById("instructions").innerHTML = "&#8618; Click <strong>'Clear'</strong> to reset.";
+            $('#instructions').css('color', 'black');
             clearInterval(t);
         }
-        $("#" + final_path[i][0] + "r" + "c" + final_path[i][1]).css('background-color', 'cyan');
+        $("#" + final_path[i][0] + "r" + "c" + final_path[i][1]).css('background-color', 'darkcyan');
         i++;
     }
 }
