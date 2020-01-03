@@ -92,7 +92,7 @@ $(function() {
 
     // on desktops/laptops.
     $('td').mouseover(function () {
-        if (isMouseDown) {
+        if (isMouseDown && counter > 1) {
             eyeD = $(this).attr('id');    // get 'id' of the 'td' clicked.
 
             // extract the row and col from the 'id' of the 'td' clicked, and put them in an array.
