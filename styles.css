@@ -54,6 +54,7 @@ td.highlighted {
 #instructions {
     font-weight: 590;
     margin-bottom: 7px;
+    color: green;
 }
 
 #okButton {
