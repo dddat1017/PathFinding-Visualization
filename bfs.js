@@ -132,8 +132,8 @@ var cq = [];    // col queue.
 var visited_m = generateVisitedMatrix(R, C);
 
 // direction vectors for going N,S,E,W,NE,NW,SE,SW.
-var up = [-1, 1, 0];    
-var down = [0, -1, 1];
+var up = [0, 1, -1];    
+var down = [0, 1, -1];
 
 // function to solve for the path. Returns a queue of all the "visited" cells.
 function solve() {
