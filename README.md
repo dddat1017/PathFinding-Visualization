@@ -1,12 +1,12 @@
-# PathFinding Visualization
+# PathFinding-Visualization
 
-### About
-FIND THE SHORTEST PATH FROM A 'STARTING' CELL TO AN 'EXIT' CELL USING THE BREADTH-FIRST SEARCH (BFS) ALGORITHM. THIS IMPLEMENTATION UTLIZED A QUEUE TO TRAVERSE THROUGH ALL THE POSSIBLE "NODES", OR CELLS, FROM THE START TO THE EXIT. THE GOAL IS TO FIND A PATH WITH THE LEAST NUMBER OF STEPS (A STEP BEING A CELL IN ANY DIRECTION N,S,W,E,NW,NE,SW,SE), NOT THE "SHORTEST DISTANCE".
+## About
+Find the shortest path on an interactive grid where users define the source/goal vertices with optional barriers. Implemented with BFS.
 
 <img src="https://user-images.githubusercontent.com/40379856/53824411-bfc34d00-3f28-11e9-8d72-505430df18cc.gif" width="45%"></img> 
 
-### Use 
-If you would like to add this visualization to your own website, please feel free to do so! No need to give credit, but it would be very much appreciated.
+## To-do
+Test out implementation of bidirectional BFS.
 
-### Check it out
+## Check it out
 https://datddo.com/pathfind/
