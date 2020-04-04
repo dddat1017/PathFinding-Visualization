@@ -12,16 +12,25 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="change_script.js"></script>
     </head>
 
     <body>
         <div class="container">
             <h1>Let's PathFind!</h1>
-            <div id="instructions">&#8618; Choose your <strong>START</strong>!</div>
+            <div class="info">
+                <div id="instructions"></div>
+                <div id="choices" style="float:right;">
+                    <input type="radio" name="answer" checked="checked" id="reg" value="regular" onChange="reloadP(this.value);"/> Regular
+                    <input type="radio" name="answer" id="bi" value="bidirectional" onChange="reloadP(this.value);"/> Bidirectional
+                </div>
+            </div>
             <div id="tableContainer"></div>
             <div id="okClear"></div>
+        </div>        
+        <div id="jsscript">
+            <script id="widget" type="text/javascript" src="bfs.js"></script>
         </div>
-        <script src="bfs.js"></script>
     </body>
     
 </html>

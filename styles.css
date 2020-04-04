@@ -51,10 +51,10 @@ td.highlighted {
   background-color: red;
 }
 
-#instructions {
-    font-weight: 590;
-    margin-bottom: 7px;
-    color: green;
+.info::after {
+    clear: both;
+    display: table;
+    content: '';
 }
 
 #okButton {
