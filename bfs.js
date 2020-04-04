@@ -54,10 +54,6 @@ class GridCell {
     equals(other) {
         return (this.row_ == other.getRow() && this.column_ == other.getColumn());
     }
-
-    hashKey() {
-        return this.getRow() + 31 * this.getColumn();
-    }
 }  // GridCell class.
 
 // Array representation of a queue. First-in-first-out (FIFO).
@@ -91,12 +87,14 @@ class Search {
         this.isSuccessful_ = false;
 
         var queue_ = new Queue();
-        this.edgeTo_ = {};
+        this.edgeTo_ = new Map();
         this.states = new Queue();
 
         queue_.add(startRC);
-        this.edgeTo_[startRC.hashKey()] = startRC;
         visitedMatrix[startRC.getRow()][startRC.getColumn()] = true;
+
+        var key = "" + startRC.getRow() + "r" + startRC.getColumn() + "c";
+        this.edgeTo_.set(key, startRC);
 
         // Direction vectors for going N,S,E,W,NE,NW,SE,SW.
         var c = [0, 1, 0, -1, 1, 1, -1, -1];
@@ -121,7 +119,8 @@ class Search {
                 
                 visited[rNeighbor][cNeighbor] = true;
                 var neighbor = new GridCell(rNeighbor, cNeighbor);
-                this.edgeTo_[neighbor.hashKey()] = currentRC;
+                key = "" + rNeighbor + "r" + cNeighbor + "c";
+                this.edgeTo_.set(key, currentRC);
                 queue_.add(neighbor);
             }
         }
@@ -182,10 +181,12 @@ function run() {
                 var state = statesExplored.remove();
                 $("#" + state.getRow() + "r" + "c" + state.getColumn()).css('background-color', '#7FFFD4');
             } else {
-                var step = path[eRC.hashKey()];
+                var key = "" + eRC.getRow() + "r" + eRC.getColumn() + "c";
+                var step = path.get(key);
                 while (!step.equals(sRC)) {
-                    $("#" + step.getRow() + "r" + "c" + step.getColumn()).css('background-color', '#48D1CC');
-                    step = path[step.hashKey()];
+                    $("#" + step.getRow() + "r" + "c" + step.getColumn()).css('background-color', '#e6e600');
+                    key = "" + step.getRow() + "r" + step.getColumn() + "c";
+                    step = path.get(key);
                 }
                 htmlText += "&#8618; Path found! Click 'Clear' to reset.";
                 document.getElementById("instructions").innerHTML = htmlText;

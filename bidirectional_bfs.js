@@ -57,10 +57,6 @@ class biGridCell {
     equals(other) {
         return (this.row_ == other.getRow() && this.column_ == other.getColumn());
     }
-
-    hashKey() {
-        return this.getRow() + 31 * this.getColumn();
-    }
 }  // biGridCell class.
 
 // Array representation of a queue. First-in-first-out (FIFO).
@@ -222,19 +218,19 @@ function birun() {
             } else {
                 var fstep = forward.get(midkey);
                 while (!fstep.equals(bisRC)) {
-                    $("#" + fstep.getRow() + "r" + "c" + fstep.getColumn()).css('background-color', '#48D1CC');
+                    $("#" + fstep.getRow() + "r" + "c" + fstep.getColumn()).css('background-color', '#e6e600');
                     var fstepkey = "" + fstep.getRow() + "r" + fstep.getColumn() + "c";
                     fstep = forward.get(fstepkey);
                 }
         
                 var bstep = backward.get(midkey);
                 while (!bstep.equals(bieRC)) {
-                    $("#" + bstep.getRow() + "r" + "c" + bstep.getColumn()).css('background-color', '#48D1CC');
+                    $("#" + bstep.getRow() + "r" + "c" + bstep.getColumn()).css('background-color', '#e6e600');
                     var bstepkey = "" + bstep.getRow() + "r" + bstep.getColumn() + "c";
                     bstep = backward.get(bstepkey);
                 }
         
-                $("#" + midCell.getRow() + "r" + "c" + midCell.getColumn()).css('background-color', '#48D1CC');
+                $("#" + midCell.getRow() + "r" + "c" + midCell.getColumn()).css('background-color', '#e6e600');
                 htmlText += "&#8618; Path found! Click 'Clear' to reset.";
                 document.getElementById("instructions").innerHTML = htmlText;
                 $('#instructions').css('color', 'black');
