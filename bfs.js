@@ -148,7 +148,7 @@ class Search {
 }  // Search class.
 
 // Flush first (i.e. reset everything).
-document.getElementById("instructions").innerHTML = "&#8618; Choose your <strong>START</strong>!";
+document.getElementById("instructions").innerHTML = "> Choose where to start!";
 $("#instructions").css({"float":"left", "font-weight":"590", "margin-bottom":"7px", "color":"green"});
 document.getElementById("tableContainer").innerHTML = "";
 document.getElementById("okClear").innerHTML = "";
@@ -168,12 +168,13 @@ $("#tableContainer").append(grid);  // Add the grid to html.
 function run() {
     var bfs = new Search(visited, sRC, eRC, rows, cols);
     $('td').off();
-    document.getElementById("instructions").innerHTML = "&#8618; Please Wait until path is found!";
+    document.getElementById("instructions").innerHTML = "> Please wait until the path is found!";
     $('#instructions').css('color', '#48D1CC');
+
+    var statesExplored = bfs.statesExplored();
 
     var htmlText = "";
     if (bfs.isSuccessful()) {
-        var statesExplored = bfs.statesExplored();
         var path =  bfs.getPath();
 
         var t = setInterval(doSequence, 0.01);
@@ -191,17 +192,27 @@ function run() {
                     key = "" + step.getRow() + "r" + step.getColumn() + "c";
                     step = path.get(key);
                 }
-                htmlText += "&#8618; Path found! Click 'Clear' to reset.";
+                htmlText += "> Path found! Click 'Clear' to reset.";
                 document.getElementById("instructions").innerHTML = htmlText;
                 $('#instructions').css('color', 'black');
                 clearInterval(t);
             }
         }
     } else {
-        htmlText += "&#8618; No possible path found. Click 'Clear' to reset and try again!";
-        document.getElementById("instructions").innerHTML = htmlText;
-        $('#instructions').css('color', 'black');
-    } 
+        var t = setInterval(doSequence, 0.01);
+        function doSequence() {
+            if (!statesExplored.isEmpty()) {
+                // Display all the states explored.
+                var state = statesExplored.remove();
+                $("#" + state.getRow() + "r" + "c" + state.getColumn()).css('background-color', '#7FFFD4');
+            } else {
+                htmlText += "> No possible path found. Click 'Clear' to reset and try again!";
+                document.getElementById("instructions").innerHTML = htmlText;
+                $('#instructions').css('color', 'black');
+                clearInterval(t);
+            }
+        }
+    }
 }
 
 // Wait for user to select the start/end/barrier. Once 'Okay!' is selected, run() is invoked.
@@ -226,7 +237,7 @@ $(function() {
             $(this).off('mouseover');
             counter++;
             sRC = new GridCell(rc[0], rc[1]);  // Record the start cell's row,col values.
-            htmlText += "&#8618; Now choose the EXIT. (Click 'Clear' to reset)";
+            htmlText += "> Now choose where to end. (Click 'Clear' to reset)";
             document.getElementById("instructions").innerHTML = htmlText;
             $('#okClear')
                 .append('<input id="reset" type="button" value="Clear" onClick="document.location.reload(false)">');
@@ -242,7 +253,7 @@ $(function() {
             $(this).off('mouseover');
             counter++;
             eRC = new GridCell(rc[0], rc[1]);  // Record the end cell's row,col values.
-            htmlText = "&#8618; Now create the BARRIERS. ";
+            htmlText = "> Now create the BARRIERS. ";
             htmlText += "(Click 'Search' when done or 'Clear' to reset)";
             document.getElementById("instructions").innerHTML = htmlText;
             htmlText = '<input id="done" type="button" value="Search" style="background-color:#22272F;" ';
