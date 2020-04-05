@@ -87,8 +87,8 @@ class Search {
         this.isSuccessful_ = false;
 
         var queue_ = new Queue();
-        this.edgeTo_ = new Map();
-        this.states = new Queue();
+        this.edgeTo_ = new Map();  // "#r#c" -> GridCell(prevR, prevC)
+        this.states = new Queue();  // All the states explored.
 
         queue_.add(startRC);
         visitedMatrix[startRC.getRow()][startRC.getColumn()] = true;
@@ -96,7 +96,7 @@ class Search {
         var key = "" + startRC.getRow() + "r" + startRC.getColumn() + "c";
         this.edgeTo_.set(key, startRC);
 
-        // Direction vectors for going N,S,E,W,NE,NW,SE,SW.
+        // Direction vectors.
         var c = [0, 1, 0, -1, 1, 1, -1, -1];
         var r = [-1, 0, 1, 0, -1, 1, -1, 1];
 
@@ -147,12 +147,13 @@ class Search {
     }
 }  // Search class.
 
-// Flush & Create.
+// Flush first (i.e. reset everything).
 document.getElementById("instructions").innerHTML = "&#8618; Choose your <strong>START</strong>!";
 $("#instructions").css({"float":"left", "font-weight":"590", "margin-bottom":"7px", "color":"green"});
 document.getElementById("tableContainer").innerHTML = "";
 document.getElementById("okClear").innerHTML = "";
 
+// Create.
 var graph = new Graph(20, 60);
 var grid = graph.getGrid();  // Grid.
 var visited = graph.getVisitedMatrix();  // Matrix initialized w/ 'false', for not visited.
@@ -178,9 +179,11 @@ function run() {
         var t = setInterval(doSequence, 0.01);
         function doSequence() {
             if (!statesExplored.isEmpty()) {
+                // Display all the states explored.
                 var state = statesExplored.remove();
                 $("#" + state.getRow() + "r" + "c" + state.getColumn()).css('background-color', '#7FFFD4');
             } else {
+                // Retrace/display the path.
                 var key = "" + eRC.getRow() + "r" + eRC.getColumn() + "c";
                 var step = path.get(key);
                 while (!step.equals(sRC)) {
@@ -222,7 +225,6 @@ $(function() {
             $(this).off('mousedown');
             $(this).off('mouseover');
             counter++;
-            visited[rc[0]][rc[1]] = true;  // Mark the start cell as 'true', for visited.
             sRC = new GridCell(rc[0], rc[1]);  // Record the start cell's row,col values.
             htmlText += "&#8618; Now choose the EXIT. (Click 'Clear' to reset)";
             document.getElementById("instructions").innerHTML = htmlText;
@@ -240,13 +242,12 @@ $(function() {
             $(this).off('mouseover');
             counter++;
             eRC = new GridCell(rc[0], rc[1]);  // Record the end cell's row,col values.
-            htmlText = "&#8618; Now create your BARRIER/OBSTACLE. ";
-            htmlText += "(Click 'Okay!' when you're done or 'Clear' to reset)";
+            htmlText = "&#8618; Now create the BARRIERS. ";
+            htmlText += "(Click 'Search' when done or 'Clear' to reset)";
             document.getElementById("instructions").innerHTML = htmlText;
-            htmlText = '<input id="done" type="button" value="Okay!" style="background-color:#22272F;" ';
+            htmlText = '<input id="done" type="button" value="Search" style="background-color:#22272F;" ';
             htmlText += 'onclick="run(); this.onclick=null;">';
-            $('#okClear')
-                .append(htmlText);
+            $('#okClear').append(htmlText);
             $('#instructions').css('color', 'red');
         } else {
             // Barrier selections.

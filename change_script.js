@@ -1,7 +1,14 @@
+// Upon loading the page, usually by refreshing or loading the
+// page for the first time.
 window.onload = function() {
     var choice = sessionStorage.getItem("choice");
     var reloading = sessionStorage.getItem("reloading");
     if (reloading) {
+        // Either "Regular" or "Bidirectional" was selected
+        // before the reload. Make sure the selection is
+        // displayed after the reload, and the right
+        // script is being used (e.g. 'bfs.js' or
+        // 'bidirectional_bfs.js').
         sessionStorage.removeItem("choice");
         sessionStorage.removeItem("reloading");
         if (choice == "regular") {
@@ -24,6 +31,9 @@ window.onload = function() {
                 document.getElementById("jsscript").appendChild(s);
         }
     } else {
+        // Regular refresh or when 'Clear' is clicked.
+        // If mode was in "Bidirectional", it will stay that way.
+        // Otherwise, default to "Regular" mode.
         if (document.getElementById("bi").checked == true) {
             var s = document.createElement("script");
                 s.type = "text/javascript";
@@ -38,6 +48,8 @@ window.onload = function() {
     }
 }
 
+// When "Regular" or "Bidirectional" is selected, store the selection
+// in 'sessionStorage' before reloading the page.
 function reloadP(choice) {
     sessionStorage.setItem("choice", choice);
     sessionStorage.setItem("reloading", "true");

@@ -1,7 +1,7 @@
-// Runs BFS algorithm based on user's selections of start/end/barrier cells.
+// Runs bidirectional BFS based on user's selections of start/end/barrier cells.
 // Used in pathfinding page only.
 
-// biGraph class representing the bigrid.
+// Graph class representing the grid.
 class biGraph {
     constructor(r, c) {
         this.numRows_ = r;
@@ -37,9 +37,9 @@ class biGraph {
     getCols() {
         return this.numCols_;
     }
-}  // biGraph class.
+}  // Graph class.
 
-// biGridCell class representing the row,col values of a cell in the bigrid.
+// GridCell class representing the row,col values of a cell in the bigrid.
 class biGridCell {
     constructor(r, c) {
         this.row_ = r;
@@ -57,7 +57,7 @@ class biGridCell {
     equals(other) {
         return (this.row_ == other.getRow() && this.column_ == other.getColumn());
     }
-}  // biGridCell class.
+}  // GridCell class.
 
 // Array representation of a queue. First-in-first-out (FIFO).
 class biQueue {
@@ -82,9 +82,9 @@ class biQueue {
     size() {
         return this.q_.length;
     }
-}  // biQueue class.
+}  // Queue class.
 
-// biSearch class which implements the BFS algorithm.
+// Search class which implements the bidirectional BFS algorithm.
 class biSearch {
     constructor(forwardVisited, backwardVisited, startRC, endRC, numRows, numCols) {
         this.isSuccessful_ = false;
@@ -94,7 +94,7 @@ class biSearch {
         this.forwardedgeTo_ = new Map();
         this.backwardedgeTo_ = new Map();
         this.states = new biQueue();
-        this.mid;
+        this.mid;  // The cell where both path meets; indicates a path is found.
 
         forwardqueue_.add(startRC);
         backwardqueue_.add(endRC);
@@ -103,20 +103,23 @@ class biSearch {
         var bkey = "" + endRC.getRow() + "r" + endRC.getColumn() + "c";
         this.forwardedgeTo_.set(fkey, startRC);
         this.backwardedgeTo_.set(bkey, endRC);
+
         forwardVisited[startRC.getRow()][startRC.getColumn()] = true;
         backwardVisited[endRC.getRow()][endRC.getColumn()] = true;
 
-        // Direction vectors for going N,S,E,W,NE,NW,SE,SW.
+        // Direction vectors.
         var c = [0, 1, 0, -1, 1, 1, -1, -1];
         var r = [-1, 0, 1, 0, -1, 1, -1, 1];
 
         while (!forwardqueue_.isEmpty() && !backwardqueue_.isEmpty()) {
+            //////////////// Forward path. ////////////////
             var a = forwardqueue_.remove();
             if (!a.equals(startRC)) { this.states.add(a); }
             var bR = a.getRow();
             var bC = a.getColumn();
             var maybeMid = "" + bR + "r" + bC + "c";
             if (this.backwardedgeTo_.has(maybeMid)) { 
+                // Found the 'mid' cell.
                 this.mid = a;
                 this.isSuccessful_ = true;
                 break;
@@ -128,17 +131,19 @@ class biSearch {
                 
                 forwardVisited[rNeighbor][cNeighbor] = true;
                 var neighbor = new biGridCell(rNeighbor, cNeighbor);
-                var fk = "" + rNeighbor + "r" + cNeighbor + "c";
-                this.forwardedgeTo_.set(fk, a);
+                fkey = "" + rNeighbor + "r" + cNeighbor + "c";
+                this.forwardedgeTo_.set(fkey, a);
                 forwardqueue_.add(neighbor);
             }
 
+            //////////////// Backward path. ////////////////
             var v = backwardqueue_.remove();
             var wR = v.getRow();
             var wC = v.getColumn();
             if (!v.equals(endRC)) { this.states.add(v); }
             maybeMid = "" + wR + "r" + wC + "c";
             if (this.forwardedgeTo_.has(maybeMid)) {
+                // Found the 'mid' cell.
                 this.mid = v;
                 this.isSuccessful_ = true;
                 break;
@@ -150,8 +155,8 @@ class biSearch {
                 
                 backwardVisited[rNeighbor][cNeighbor] = true;
                 var neighbor = new biGridCell(rNeighbor, cNeighbor);
-                var bk = "" + rNeighbor + "r" + cNeighbor + "c";
-                this.backwardedgeTo_.set(bk, v);
+                bkey = "" + rNeighbor + "r" + cNeighbor + "c";
+                this.backwardedgeTo_.set(bkey, v);
                 backwardqueue_.add(neighbor);
             }
         }
@@ -169,30 +174,27 @@ class biSearch {
         return this.states;
     }
 
-    isSafe(bivisited, row, col, numRows, numCols) {
-        return (row >= 0) && (row < numRows) && (col >= 0) && (col < numCols) && (!bivisited[row][col]); 
+    isSafe(visited, row, col, numRows, numCols) {
+        return (row >= 0) && (row < numRows) && (col >= 0) && (col < numCols) && (!visited[row][col]); 
     }
+}  // Search class.
 
-    isGoal(row, col, endRC) {
-        return (row == endRC.getRow()) && (col == endRC.getColumn());
-    }
-}  // biSearch class.
-
-// Flush & Create.
+//  Flush first (i.e. reset everything).
 document.getElementById("instructions").innerHTML = "&#8618; Choose your <strong>START</strong>!";
 $("#instructions").css({"float":"left", "font-weight":"590", "margin-bottom":"7px", "color":"green"});
 document.getElementById("tableContainer").innerHTML = "";
 document.getElementById("okClear").innerHTML = "";
 
+// Create.
 var bigraph = new biGraph(20, 60);
 var bigrid = bigraph.getGrid();  // Grid.
-var bivisited = bigraph.getVisitedMatrix();  // Matrix initialized w/ 'false', for not bivisited.
-var birows = bigraph.getRows();  // # of birows in the bigrid.
-var bicols = bigraph.getCols();  // # of bicols in the bigrid.
+var bivisited = bigraph.getVisitedMatrix();  // Array of two 'visited' matrices.
+var birows = bigraph.getRows();  // # of rows in the grid.
+var bicols = bigraph.getCols();  // # of cols in the grid.
 var bisRC;  // The start cell's row,col values.
 var bieRC;  // The end cell's row,col values.
 
-$("#tableContainer").append(bigrid);  // Add the bigrid to html.
+$("#tableContainer").append(bigrid);  // Add the grid to html.
 
 // When 'Okay!' is clicked. Where the magic all happens.
 function birun() {
@@ -204,32 +206,34 @@ function birun() {
     var htmlText = "";
     if (bfs.isSuccessful()) {
         var statesExplored = bfs.statesExplored();
-        var path =  bfs.getPath();
-        var forward = path[0];
-        var backward = path[1];
-        var midCell = path[2];
+        var path =  bfs.getPath();  // Array of forward/backward edgeTo maps and the 'mid' cell.
+        var forward = path[0];  // Forward edgeTo map.
+        var backward = path[1]; // Backward edgeTo map.
+        var midCell = path[2];  // 'mid' cell.
         var midkey = "" + midCell.getRow() + "r" + midCell.getColumn() + "c";
 
         var t = setInterval(doSequence, 0.01);
         function doSequence() {
             if (!statesExplored.isEmpty()) {
+                // Display all the states explored.
                 var state = statesExplored.remove();
                 $("#" + state.getRow() + "r" + "c" + state.getColumn()).css('background-color', '#7FFFD4');
             } else {
+                // Retrace/display the path. First forward, then backward.
                 var fstep = forward.get(midkey);
                 while (!fstep.equals(bisRC)) {
                     $("#" + fstep.getRow() + "r" + "c" + fstep.getColumn()).css('background-color', '#e6e600');
                     var fstepkey = "" + fstep.getRow() + "r" + fstep.getColumn() + "c";
                     fstep = forward.get(fstepkey);
                 }
-        
+
                 var bstep = backward.get(midkey);
                 while (!bstep.equals(bieRC)) {
                     $("#" + bstep.getRow() + "r" + "c" + bstep.getColumn()).css('background-color', '#e6e600');
                     var bstepkey = "" + bstep.getRow() + "r" + bstep.getColumn() + "c";
                     bstep = backward.get(bstepkey);
                 }
-        
+
                 $("#" + midCell.getRow() + "r" + "c" + midCell.getColumn()).css('background-color', '#e6e600');
                 htmlText += "&#8618; Path found! Click 'Clear' to reset.";
                 document.getElementById("instructions").innerHTML = htmlText;
@@ -282,13 +286,12 @@ $(function() {
             $(this).off('mouseover');
             counter++;
             bieRC = new biGridCell(rc[0], rc[1]);  // Record the end cell's row,col values.
-            htmlText = "&#8618; Now create your BARRIER/OBSTACLE. ";
-            htmlText += "(Click 'Okay!' when you're done or 'Clear' to reset)";
+            htmlText = "&#8618; Now create the BARRIERS. ";
+            htmlText += "(Click 'Search' when done or 'Clear' to reset)";
             document.getElementById("instructions").innerHTML = htmlText;
-            htmlText = '<input id="done" type="button" value="Okay!" style="background-color:#22272F;" ';
+            htmlText = '<input id="done" type="button" value="Search" style="background-color:#22272F;" ';
             htmlText += 'onclick="birun(); this.onclick=null;">';
-            $('#okClear')
-                .append(htmlText);
+            $('#okClear').append(htmlText);
             $('#instructions').css('color', 'red');
         } else {
             // Barrier selections.

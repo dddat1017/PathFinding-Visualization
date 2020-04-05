@@ -47,9 +47,9 @@ td {
     height: 17px;
 }
 
-td.highlighted {
-  background-color: red;
-}
+    td.highlighted {
+        background-color: red;
+    }
 
 .info::after {
     clear: both;
@@ -78,9 +78,9 @@ td.highlighted {
     margin-left: 5px;
 }
 
-#done:hover {
-    background-color: darkgoldenrod;
-}
+    #done:hover {
+        background-color: darkgoldenrod;
+    }
 
 #reset {
     display: inline-block;
@@ -105,7 +105,7 @@ td.highlighted {
         padding: 45px;
     }
 
-    .pathfind h1 {
-        padding-top: 65px;
-    }
+        .pathfind h1 {
+            padding-top: 65px;
+        }
 }
