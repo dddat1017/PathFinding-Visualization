@@ -1,3 +1,5 @@
+// Script for changing bfs scripts based on algorithm selection.
+
 // Upon loading the page, usually by refreshing or loading the
 // page for the first time.
 window.onload = function() {
@@ -14,19 +16,15 @@ window.onload = function() {
         if (choice == "regular") {
             document.getElementById("reg").checked = true;
             var s = document.createElement("script");
-                s.type = "text/javascript";
                 s.src = "bfs.js";
                 s.innerHTML = null;
-                s.id = "widget";
                 document.getElementById("jsscript").innerHTML = "";
                 document.getElementById("jsscript").appendChild(s);
         } else if (choice == "bidirectional") {
             document.getElementById("bi").checked = true;
             var s = document.createElement("script");
-                s.type = "text/javascript";
                 s.src = "bidirectional_bfs.js";
                 s.innerHTML = null;
-                s.id = "widget";
                 document.getElementById("jsscript").innerHTML = "";
                 document.getElementById("jsscript").appendChild(s);
         }
@@ -36,10 +34,8 @@ window.onload = function() {
         // Otherwise, default to "Regular" mode.
         if (document.getElementById("bi").checked == true) {
             var s = document.createElement("script");
-                s.type = "text/javascript";
                 s.src = "bidirectional_bfs.js";
                 s.innerHTML = null;
-                s.id = "widget";
                 document.getElementById("jsscript").innerHTML = "";
                 document.getElementById("jsscript").appendChild(s);
         } else {
