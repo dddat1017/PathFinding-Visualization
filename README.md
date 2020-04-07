@@ -5,8 +5,5 @@ Find the shortest path on an interactive grid where users define the source/goal
 
 <img src="https://user-images.githubusercontent.com/40379856/53824411-bfc34d00-3f28-11e9-8d72-505430df18cc.gif" width="45%"></img> 
 
-## To-do
-Test out implementation of bidirectional BFS and add more informative animations.
-
 ## Check it out
 https://datddo.com/pathfind/
